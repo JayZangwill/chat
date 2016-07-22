@@ -1,10 +1,8 @@
 var http = require("http");
-var express = require("express");
 var fs = require("fs");
 var path = require("path");
 var mime = require("mime"); //根据文件扩展名得出mime类型
 var cache = {}; //缓存文件的对象
-var app = express();
 /*文件没找到*/
 function send404(res) {
     res.writeHead(404, {
@@ -43,7 +41,7 @@ function serverStatic(res, cache, absPath) {
     }
 }
 /*创建服务器*/
-app.get("/", function (req, res) {
+var server = http.createServer(function (req, res) {
     var filePath = false;
     if (req.url == "/") {
         filePath = "index.html";
@@ -53,27 +51,8 @@ app.get("/", function (req, res) {
     var absPath = './' + filePath;
     serverStatic(res, cache, absPath); //返回静态文件
 });
-//var ip=  process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-//var prot=process.env.OPENSHIFT_NODEJS_PORT || 3000;
-var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
-    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
-app.listen(prot,ip);
-
-
-
-
-//var server = http.createServer(function (req, res) {
-//    var filePath = false;
-//    if (req.url == "/") {
-//        filePath = "index.html";
-//    } else {
-//        filePath = req.url; //将url转为相对路径
-//    }
-//    var absPath = './' + filePath;
-//    serverStatic(res, cache, absPath); //返回静态文件
-//});
-//server.listen(3000, function () {
-//    console.log("success");
-//});
+server.listen(3000, function () {
+    console.log("success");
+});
 var chatServer = require('./lib/chat_server');
 chatServer.listen(server);
