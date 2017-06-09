@@ -41,18 +41,18 @@ function serverStatic(res, cache, absPath) {
 	}
 }
 /*创建服务器*/
-var server = http.createServer(function(req, res) {
-	var filePath = false;
-	if(req.url == "/") {
-		filePath = "index.html";
-	} else {
-		filePath = req.url; //将url转为相对路径
-	}
-	var absPath = './' + filePath;
-	serverStatic(res, cache, absPath); //返回静态文件
-});
-server.listen(3000, function() {
-	console.log("success");
-});
-var chatServer = require('./lib/chat_server');
-chatServer.listen(server);
+	var server = http.createServer(function(req, res) {
+		var filePath = false;
+		if(req.url == "/") {
+			filePath = "chat/index.html";
+		} else {
+			filePath = req.url; //将url转为相对路径
+		}
+		var absPath = './' + filePath;
+		serverStatic(res, cache, absPath); //返回静态文件
+	});
+	server.listen(3000, function() {
+		console.log("success");
+	});
+	var chatServer = require('./lib/chat_server');
+	chatServer.listen(server);
